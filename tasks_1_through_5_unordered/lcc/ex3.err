@@ -1,0 +1,3 @@
+m:\cdev\lcc\__check_var.c:
+Warning lcc\__check_var.c: 3  old-style function definition for 'main'
+Warning lcc\__check_var.c: 3  missing prototype for 'main'

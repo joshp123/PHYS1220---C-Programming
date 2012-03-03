@@ -1,0 +1,13 @@
+/* maths functions yo */
+#include <stdio.h>
+#include <math.h>
+int main() {
+	float tangent,root,pi;
+	int power;
+	pi = acos(-1.0);
+	tangent = tan(pi/4);
+	power = pow(2,3);
+	root = sqrt(9.0);
+	printf(" pi = %f\ntangent=%f\n power = %d\n root=%f\n", pi,tangent,power,root);
+	return 0;
+}
