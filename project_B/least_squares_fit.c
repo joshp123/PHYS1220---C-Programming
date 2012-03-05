@@ -57,14 +57,18 @@ int UserSelection(int options){
 	return input;
 }
 
-int GetFileLineCount(FILE *fin){
+int GetFileLineCount(char *filename){
+	FILE *fin;
+	fin = fopen(filename,"r");
 	int linecount =1;
-	while(fgetc(fin)!=EOF){
-		linecount++;
-		printf("%s\n",(fgetc(fin)));
+	char c;
+	while((c = fgetc(fin)) != EOF){
+		if (c == '\n'){
+			linecount++;
+		}
 	}
-	//fclose(fin);
 	printf("linecount: %d\n",linecount);
+	fclose(fin);
 	return linecount;
 }
 
@@ -82,17 +86,12 @@ etc.
 
 It returns data in the struct "output" as described above.
 
-TODO: make it so you can call this exe from the commandline being all leastsquares.exe -somefilename.whatever and it opens that. It might even work if you do leastsquares.exe -"C:\gbs\555\foo.bar" but i'll get to that when i do this (see you in 2015). I suppose you could also sorta prompt for it in the program but that's kinda stupid, it would be more sensible to make a GUI and use window's browse thing but now i'm getting carried away
-
-omg i acutally did this fuck yeah i'm awesome :sun:
-
 */
 
 dataset GetInput(char *filename, int verbose){ // either char * or char *filename idk
 	FILE *fin;
 	int i;
 	dataset output;
-
 	if(verbose == 1)
 		printf("Opening %s\n",filename);
 	
@@ -102,11 +101,13 @@ dataset GetInput(char *filename, int verbose){ // either char * or char *filenam
 		printf("Could not open file.\n");
 		return;
 	}
-	printf("argh\n");
+
 	// file open routine complete, get linecount
-	output.length = GetFileLineCount(fin);
+
+	output.length = GetFileLineCount(filename);
+
 	// number of data points counted, now to read in the actual data (and create a couple of temporary arrays)
-	printf("omg\n");
+
 	float x[output.length],y[output.length],yerr[output.length];
 	
 	for (i = 0; i < output.length; ++i){
