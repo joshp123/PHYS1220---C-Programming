@@ -11,7 +11,6 @@ this terrible source code available free for you to do whatever the hell with at
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
-#include <stdlib.h>
 
 // Structure for the final result. returns m and c values and errors on both, i.e. y = mx + c 
 typedef struct {
@@ -30,31 +29,10 @@ typedef struct{
 	double yerr[1000];
 } dataset;
 
-// Functions to flush to end of line - this is useful for a reason. i'm not entirely sure what that reason is but whatever 
-
-void flushf(FILE *getfile){  
-	while(fgetc(getfile)!='\n'){}
-}
+// Functions to flush to end of line
 
 void flush(){  // LCC complier only plays nice when you use flush(void) instead of flush()  . GCC on the other hand does not. welp that's my cool compiler story for today
 	while(getchar()!='\n'){}
-}
-
-/*
-Function to prompt user for a numerical choice. I.e. pick 1) open .txt file, 2) open.csv file or 3) do nothing. If choice lies outside that range, prompts until valid choice in range is entered.
-*/
-
-int UserSelection(int options){
-	int valid,input;
-	valid = 0;
-	while(valid==0){
-		valid = scanf("%d", &input);
-		flush();
-		if(valid<=0 || valid > options){ // if user input is smaller than zero or greater than # of available options, it is not valid, prompt for new input
-			printf("Please pick a valid option!\n");
-		}
-	}
-	return input;
 }
 
 int GetFileLineCount(char *filename){
@@ -67,7 +45,6 @@ int GetFileLineCount(char *filename){
 			linecount++;
 		}
 	}
-	printf("linecount: %d\n",linecount);
 	fclose(fin);
 	return linecount;
 }
@@ -88,23 +65,29 @@ It returns data in the struct "output" as described above.
 
 */
 
-dataset GetInput(char *filename, int verbose){ // either char * or char *filename idk
+dataset GetInput(char *filename, int verbose){
 	FILE *fin;
 	int i;
 	dataset output;
-	if(verbose == 1)
+	if(verbose == 1){
 		printf("Opening %s\n",filename);
+	}
 	
 	fin = fopen(filename, "r");
 
-	if(fin==0 && verbose == 1) {
-		printf("Could not open file.\n");
+	if(fin==0){
+		if(verbose == 1) {
+			printf("Could not open file. Either you typed it wrong or it doesn't exist!\n");
+		}
 		return;
 	}
 
 	// file open routine complete, get linecount
 
 	output.length = GetFileLineCount(filename);
+	if (verbose ==1){
+		printf("Counted %d lines. Reading in data\n",output.length);
+	}
 
 	// number of data points counted, now to read in the actual data (and create a couple of temporary arrays)
 
@@ -113,7 +96,7 @@ dataset GetInput(char *filename, int verbose){ // either char * or char *filenam
 	for (i = 0; i < output.length; ++i){
 		int invalid = fscanf(fin, "%f,%f,%f", &x[i], &y[i], &yerr[i]);
 		if(invalid !=3){
-			printf("Non-numeric data detected in file or more than 3 columns present. Please verify your data!\nProgram exiting.");
+			printf("Error found on line number %d.\nThis is usually caused by non-numeric data detected in file or having more than 3 columns present. Please verify your data!\nNB: if the last line of your file is blank, \nProgram exiting.",i);
 			return;
 		}
 		if (yerr[i] == 0){
@@ -169,10 +152,8 @@ graph LeastSquares(int length, double x[], double y[], double yerr[]){
 		r = r + ((y[i])*(m));
 		s = s + ((x[i]*x[i])*(m));
 		t = t + ((x[i]*y[i])*(m));
-		printf("Diagnostics: \nm = %f \t p = %f \t q = %f \t r = %f \t \ns = %f \t t = %f\n",m,p,q,r,s,t);
 	}
 	delta = (p*s) - (q*q);
-	printf("Diagnostics: delta = %f \n",delta);
 	result.m = ((p*t)-(q*r))/(delta);
 	result.c = ((r*s)-(q*t))/(delta);
 	result.merr = (sqrt(p/delta))/length;
@@ -185,23 +166,23 @@ int main(int argc, char *argv[]){
 	int verbose = 0;
 	// process command line args
 
-	if ((argc > 1 && strcmp(argv[2],"-help") == 0) || argc == 1){  // display help message if either no arguments passed or "-help" passed
+	if ((argc > 1 && strcmp(argv[1],"-help") == 0) || argc == 1){  // display help message if either no arguments passed or "-help" passed
 		printf("\n\nThis program calculates the least squares fit of a set of data. \nSupported file format is .csv. \nCurrently only supports comma as delimiter.\n\nDefault usage is: leastsquares.exe \"filename\" [-v]\n\n\t-help \tDisplays this help message\n\t-v\tVerbose mode: displays errors/status, prints the\n\t\tdata that it reads for verification purposes.\n\n");
 		return 0;
 	}
 
 	else if(argc > 1){
 		strcpy(filename,argv[1]);
-		if (strcmp(argv[2],"-v") == 0){
-			verbose = 1;
-		}
+		if (argc > 2){
+			if(strcmp(argv[2],"-v") == 0){
+				verbose = 1;
+			}
+		}	
 	}
-	int choice;
 	// command line args processed, now go ~do shit~
 
 	dataset input;
 	graph output;
-
 	input = GetInput(filename,verbose); // go open the file
 	output = LeastSquares(input.length,input.x,input.y,input.yerr);
 	if(isnan(output.m) == 0 && isnan(output.merr) == 0 && isnan(output.c) == 0 && isnan(output.cerr) == 0){
