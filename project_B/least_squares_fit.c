@@ -86,7 +86,7 @@ dataset GetInput(char *filename, int verbose){
 
 	output.length = GetFileLineCount(filename);
 	if (verbose ==1){
-		printf("Counted %d lines. Reading in data\n",output.length);
+		printf("Counted %d lines. Reading in data:\n",output.length);
 	}
 
 	// number of data points counted, now to read in the actual data (and create a couple of temporary arrays)
@@ -96,8 +96,13 @@ dataset GetInput(char *filename, int verbose){
 	for (i = 0; i < output.length; ++i){
 		int invalid = fscanf(fin, "%f,%f,%f", &x[i], &y[i], &yerr[i]);
 		if(invalid !=3){
-			printf("Error found on line number %d.\nThis is usually caused by non-numeric data detected in file or having more than 3 columns present. Please verify your data!\nNB: if the last line of your file is blank, \nProgram exiting.",i);
-			return;
+			if(i == output.length-1){ // if it's on the last line, ignore it, it's not an error, it's just a blank line.
+				output.length--;
+			}
+			else{
+				printf("Error found on line number %d.\nThis is usually caused by non-numeric data detected in file or having more than 3 columns present. Please verify your data!\nNB: if the last line of your file is blank, \nProgram exiting.",i+1);
+				return;
+			}
 		}
 		if (yerr[i] == 0){
 			if (verbose == 1){
