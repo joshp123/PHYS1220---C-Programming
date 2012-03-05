@@ -86,15 +86,12 @@ omg i acutally did this fuck yeah i'm awesome :sun:
 */
 
 dataset GetInput(char *filename, int verbose){ // either char * or char *filename idk
-	printf("Commencing file open routine\n");//delme
 	FILE *fin;
 	int i;
-	// TODO int xcount, ycount, yerrcount, - add this line later to verify same number of points on each line. necessarry? y/n
 	dataset output;
 
-	if(verbose == 1){
-		printf("Opening %s\n",filename);// diagnostic line
-	}
+	if(verbose == 1)
+		printf("Opening %s\n",filename);
 	
 	fin = fopen(filename, "r");
 
@@ -106,37 +103,47 @@ dataset GetInput(char *filename, int verbose){ // either char * or char *filenam
 	// file open routine complete, get linecount
 
 	output.length = 10; // TEST LINE PLZ REMOVE
-
+	
 	//output.length = GetFileLineCount(fin);
 
-	// number of data points counted, now to read in the actual data
+	// number of data points counted, now to read in the actual data (and create )
 
-	while(fgetc(fin) != 'EOF'){ // terminates when it hits EOF
-		for (i = 0; i < output.length; ++i){
-			int valid = fscanf(fin, "%f,%f,%f", &output.x[i], &output.y[i], &output.yerr[i]);
-			printf("x = %.2f\ty = %.2f\ty error = %.2f\n",output.x[i],output.y[i],output.yerr[i]); // diagnostic line
-			if(valid !=0){
-				printf("Non-numeric data detected in file.\n");
-			}
-			if (output.yerr[i] == 0){
-				if (verbose == 1){
-					printf("Your data contains errors that are equal to zero. This is invalid. Program exiting\n");
-				}
+	float x[output.length],y[output.length],yerr[output.length];
+	
+	for (i = 0; i < output.length; ++i){
+		int invalid = fscanf(fin, "%f,%f,%f", &x[i], &y[i], &yerr[i]);
+		if(invalid !=3){
+			printf("Non-numeric data detected in file or more than 3 columns present. Please verify your data!\nProgram exiting.");
+			return;
+		}
+		if (yerr[i] == 0){
+			if (verbose == 1){
+				printf("Your data contains errors that are equal to zero. This is invalid.\nProgram exiting.\n");
 			}
 			return;
 		}
-	}
+	}	 
 
 	fclose(fin);
 
-	if (verbose = 1){
-		printf("Your dataset has %i constituent points:\n\n",output.length);
+	// map temp stuff to actual output stuff to compensate for fscanf being hella gay
+
+	for (int i = 0; i < output.length; ++i)
+	{
+		output.x[i] = x[i];
+		output.y[i] = y[i];
+		output.yerr[i] = yerr[i];
+	}
+
+	if (verbose == 1){
+		printf("Your dataset has %d constituent points:\n\n",output.length);
 		for (i = 0; i < output.length; ++i)
 		{
 			printf("x = %.2f\ty = %.2f\ty error = %.2f\n",output.x[i],output.y[i],output.yerr[i]);
 		}
+		printf("\n");
 	}
-	
+
 	return output;
 }
 
@@ -175,45 +182,28 @@ int main(int argc, char *argv[]){
 	char filename[256];
 	int verbose = 0;
 	// process command line args
-	for (int i = 0; i < argc; ++i)
-	{
-		printf("%s\n",argv[i]); // diagnostic line
-	}
-	if ((argc > 1 && strcmp(argv[2],"-help") == 0) || argc == 1){  // display help message if either no arguments passed or "-help" passed
-		printf("\n\nThis program calculates the least squares fit of a set of data. Supported file format is .csv. Currently only supports comma as delimiter.\n\nDefault usage is: leastsquares.exe \"filename\" [-v]\n\n\t-help \tDisplays this help message\n\t-v\tVerbose mode: displays errors/status, prints the\n\t\tdata that it reads for verification purposes.\n\n");
 
-		// delete this later:
-		printf("LAZY MODE TO CHECK THAT MY THIS ACTUALLY WORKS: hit 1 to continue, 2 to gtfo\n");
-		int cont = UserSelection(2);
-		if (cont == 1){
-		}
-		else {
-			return 0; // leave this in (i.e. exit after help message)
-		}
+	if ((argc > 1 && strcmp(argv[2],"-help") == 0) || argc == 1){  // display help message if either no arguments passed or "-help" passed
+		printf("\n\nThis program calculates the least squares fit of a set of data. \nSupported file format is .csv. \nCurrently only supports comma as delimiter.\n\nDefault usage is: leastsquares.exe \"filename\" [-v]\n\n\t-help \tDisplays this help message\n\t-v\tVerbose mode: displays errors/status, prints the\n\t\tdata that it reads for verification purposes.\n\n");
+		return 0;
 	}
 
 	else if(argc > 1){
-		printf("accepting filename\n"); // diagnostic line
 		strcpy(filename,argv[1]);
 		if (strcmp(argv[2],"-v") == 0){
-			printf("verbosity enabled\n"); // diagnostic line
 			verbose = 1;
-
 		}
 	}
 	int choice;
-	printf("verbosity = %d \n",verbose);
 	// command line args processed, now go ~do shit~
 
 	dataset input;
 	graph output;
-	// deprecated:
-	// printf("This program calculates the least squares fit of a set of data.\nYour data should be in the same directory as this executable,  \n");
-	// printf("Is your data in a .txt or a .csv file? Enter 1 for txt, 2 for csv.\n");
-	// choice = UserSelection(2); // do userselection function, ensures user only picks 1 or 2
 
 	input = GetInput(filename,verbose); // go open the file
 	output = LeastSquares(input.length,input.x,input.y,input.yerr);
-	printf("The least squares fit of this data is: y = (%.2f \361 %.2f)x + (%.2f \361 %.2f) \n",output.m,output.merr,output.c,output.cerr);
+	if(isnan(output.m) == 0 && isnan(output.merr) == 0 && isnan(output.c) == 0 && isnan(output.cerr) == 0){
+		printf("The least squares fit of this data is: y = (%.2f \361 %.2f)x + (%.2f \361 %.2f) \n",output.m,output.merr,output.c,output.cerr);
+	}
 	return 0;
 }
