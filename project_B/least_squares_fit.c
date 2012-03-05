@@ -11,6 +11,7 @@ this terrible source code available free for you to do whatever the hell with at
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
+#include <stdlib.h>
 
 // Structure for the final result. returns m and c values and errors on both, i.e. y = mx + c 
 typedef struct {
@@ -24,7 +25,7 @@ typedef struct {
 
 typedef struct{
 	int length;
-	double x[1000]; // TODO: figure out if you can dynamically extend the arrays if you want to be retarded and use a billion data points or whatever instead of some arbitrary limit
+	double x[1000];
 	double y[1000];
 	double yerr[1000];
 } dataset;
@@ -37,8 +38,7 @@ void flushf(FILE *getfile){
 
 void flush(){  // LCC complier only plays nice when you use flush(void) instead of flush()  . GCC on the other hand does not. welp that's my cool compiler story for today
 	while(getchar()!='\n'){}
-	}
-
+}
 
 /*
 Function to prompt user for a numerical choice. I.e. pick 1) open .txt file, 2) open.csv file or 3) do nothing. If choice lies outside that range, prompts until valid choice in range is entered.
@@ -57,11 +57,14 @@ int UserSelection(int options){
 	return input;
 }
 
-int GetFileLineCount(FILE *FILE){
-	int linecount;
-	// TODO: finish this (iterate over entire file reading \n, and incrementing, break at EOF)
-
-	// TODO: since this scans for \n might be possible to do non-numeric data checking here? idk
+int GetFileLineCount(FILE *fin){
+	int linecount =1;
+	while(fgetc(fin)!=EOF){
+		linecount++;
+		printf("%s\n",(fgetc(fin)));
+	}
+	//fclose(fin);
+	printf("linecount: %d\n",linecount);
 	return linecount;
 }
 
@@ -99,15 +102,11 @@ dataset GetInput(char *filename, int verbose){ // either char * or char *filenam
 		printf("Could not open file.\n");
 		return;
 	}
-
+	printf("argh\n");
 	// file open routine complete, get linecount
-
-	output.length = 10; // TEST LINE PLZ REMOVE
-	
-	//output.length = GetFileLineCount(fin);
-
-	// number of data points counted, now to read in the actual data (and create )
-
+	output.length = GetFileLineCount(fin);
+	// number of data points counted, now to read in the actual data (and create a couple of temporary arrays)
+	printf("omg\n");
 	float x[output.length],y[output.length],yerr[output.length];
 	
 	for (i = 0; i < output.length; ++i){
@@ -139,7 +138,7 @@ dataset GetInput(char *filename, int verbose){ // either char * or char *filenam
 		printf("Your dataset has %d constituent points:\n\n",output.length);
 		for (i = 0; i < output.length; ++i)
 		{
-			printf("x = %.2f\ty = %.2f\ty error = %.2f\n",output.x[i],output.y[i],output.yerr[i]);
+			printf("x = %.4f\ty = %.4f\ty error = %.4f\n",output.x[i],output.y[i],output.yerr[i]);
 		}
 		printf("\n");
 	}
@@ -165,12 +164,14 @@ graph LeastSquares(int length, double x[], double y[], double yerr[]){
 	for(i = 0; i<length; i++){
 		m = (1/(yerr[i]*yerr[i]));
 		p = p + m;
-		q = (q + x[i])/(m);
-		r = (r + y[i])/(m);
-		s = (s + (x[i]*x[i]))/(m);
-		t = (t + (x[i]*y[i]))/(m);
+		q = q + ((x[i])*(m));
+		r = r + ((y[i])*(m));
+		s = s + ((x[i]*x[i])*(m));
+		t = t + ((x[i]*y[i])*(m));
+		printf("Diagnostics: \nm = %f \t p = %f \t q = %f \t r = %f \t \ns = %f \t t = %f\n",m,p,q,r,s,t);
 	}
 	delta = (p*s) - (q*q);
+	printf("Diagnostics: delta = %f \n",delta);
 	result.m = ((p*t)-(q*r))/(delta);
 	result.c = ((r*s)-(q*t))/(delta);
 	result.merr = (sqrt(p/delta))/length;
