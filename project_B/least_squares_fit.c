@@ -96,7 +96,7 @@ dataset GetInput(char *filename, int verbose){
 	for (i = 0; i < output.length; ++i){
 		int invalid = fscanf(fin, "%f,%f,%f", &x[i], &y[i], &yerr[i]);
 		if(invalid !=3){
-			if(i == output.length-1){ // if it's on the last line, ignore it, it's not an error, it's just a blank line.
+			if(i == output.length-1){ // if it's on the last line, ignore it, it's not an error, it's just a blank line. (excel saves files with a final blank line for some reason)
 				output.length--;
 			}
 			else{

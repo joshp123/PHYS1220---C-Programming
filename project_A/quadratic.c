@@ -60,7 +60,7 @@ void flush(void){  // complier only plays nice when you use void instead of ()  
 }
 
 /* Function to get input in form of float and check it's legit */
-float getfloat(void){
+float GetFloat(void){
 	float input;
 	int valid;
 	valid = 0;
@@ -115,13 +115,13 @@ int quadratic(float a, float b, float c){
 
 int main(){
 	float a,b,c;
-	int option;
+	// int option;
 	printf("Enter the quadratic coefficient:\n");
-	a = getfloat();
+	a = GetFloat();
 	printf("\nEnter the linear coefficient:\n");
-	b = getfloat();
+	b = GetFloat();
 	printf("\nEnter the constant term:\n");
-	c = getfloat();
+	c = GetFloat();
 	quadratic(a,b,c);
 
 	// TODO: figure out how to get python working with GCC
