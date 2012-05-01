@@ -32,7 +32,7 @@ typedef struct{
 
 // Functions to flush to end of line
 
-void flush(){  // LCC complier only plays nice when you use flush(void) instead of flush()  . GCC on the other hand does not. welp that's my cool compiler story for today
+void flush(){  // LCC complier only plays nice when you use flush(void) instead of flush()  . GCC on the other hand does not. welp that's my cool compiler story for today, hope u enjoyed it
 	while(getchar()!='\n'){}
 }
 
@@ -185,7 +185,7 @@ int main(int argc, char *argv[]){
 			}
 		}	
 	}
-	// command line args processed, now go ~do shit~
+	// command line args processed, now go ~do stuff~
 
 	dataset input;
 	graph output;
