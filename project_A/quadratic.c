@@ -62,8 +62,7 @@ void flush(void){  // complier only plays nice when you use void instead of ()  
 /* Function to get input in form of float and check it's legit */
 float GetFloat(void){
 	float input;
-	int valid;
-	valid = 0;
+	int valid = 0;
 	while(valid==0){
 		valid = scanf("%f", &input);
 		flush();
@@ -76,7 +75,7 @@ float GetFloat(void){
 
 /* Function to calculate and print the roots of a quadratic equation */
 int quadratic(float a, float b, float c){
-	complex result,descr_root,root1,root2; //luv2declarevariables (not)
+	complex descr_root,root1,root2; 
 	float descr;
 	int compl,distinct,s;
 	s = 1;
