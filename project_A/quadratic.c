@@ -55,7 +55,7 @@ int UserSelection(int options){
 
 /* Function to flush to end of line */
 
-void flush(void){  // complier only plays nice when you use void instead of ()  vOv
+void flush(void){  // compiler only plays nice when you use void instead of ()  vOv
 	while(getchar()!='\n'){}
 }
 
@@ -77,8 +77,7 @@ float GetFloat(void){
 int quadratic(float a, float b, float c){
 	complex descr_root,root1,root2; 
 	float descr;
-	int compl,distinct,s;
-	s = 1;
+	int s = 1; // case variable
 	printf("\nComputing roots of %.2f x\375 + %.2f x + %.2f = 0\n\n",a,b,c); 
 
 	/*
@@ -97,7 +96,7 @@ int quadratic(float a, float b, float c){
 	root1.re = ((-1*b) + descr_root.re)/(2*a);
 	root1.im = (descr_root.im)/(2*a);
 	root2.re = ((-1*b) - descr_root.re)/(2*a);
-	root2.im = (descr_root.im)/(2*a);
+	root2.im = (-1)*(descr_root.im)/(2*a);
 	switch(s) {
 		case 1:
 			printf("There are 2 distinct, real roots. They are:\n\n\tx = %.2f\n\nand\n\n\tx = %.2f\n",root1.re,root2.re);
