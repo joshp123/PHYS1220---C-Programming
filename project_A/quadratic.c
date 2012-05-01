@@ -36,23 +36,6 @@ complex croot(float x){
 return root;
 }
 
-/*
-Function to prompt user for a numerical choice. I.e. pick 1) open .txt file, 2) open.csv file or 3) do nothing. If choice lies outside that range, prompts until valid choice in range is entered. 
-*/
-
-int UserSelection(int options){
-	int valid,input;
-	valid = 0;
-	while(valid==0){
-		valid = scanf("%d", &input);
-		flush();
-		if(valid<=0 || valid > options){ // if user input is smaller than zero or greater than # of available options, it is not valid, prompt for new input
-			printf("Please pick a valid option!\n");
-		}
-	}
-	return input;
-}
-
 /* Function to flush to end of line */
 
 void flush(void){  // compiler only plays nice when you use void instead of ()  vOv
@@ -122,15 +105,5 @@ int main(){
 	c = GetFloat();
 	quadratic(a,b,c);
 
-	// TODO: figure out how to get python working with GCC
-
-	// printf("Do you want to go for the serious, boring C option or the comedy python imprementation? (type 1 for C, 2 for python\n");
-	// option = UserSelection(2);
-	// if(option == 1){
-	// 	quadratic(a,b,c);
-	// }
-	// else{
-	// 	// call quadratic.py
-	// }
 	return 0;
 }
