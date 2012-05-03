@@ -4,7 +4,11 @@ Project B: Parameters of a least squares fit
 
 Takes data from a file / user input and calculates a least squares fit of them, returns equation in the form y = mx + c
 
-this terrible source code available free for you to do whatever the hell with at http://github.com/joshp123 (idk why you would but whatever it was useful for version control)
+This terrible source code available free for you to do whatever the hell with at http://github.com/joshp123 (idk why you would but whatever it was useful for version control)
+
+Limitations: Only handles 1000 values, stops reading after 1k, doesn't actually alert you because any time spent doing that would have been better spent implementing Dynamic Memory Allocation which I might do at some point when I'm not feeling lazy, plus if you have 1k values go use excel instead
+
+Why this is amazing: is a fully functional command line utility and uses the ubiquitous .csv file format.
 
 */
 
@@ -28,12 +32,6 @@ typedef struct{
 	double y[1000];
 	double yerr[1000];
 } dataset;
-
-// Functions to flush to end of line
-
-void flush(){  // LCC complier only plays nice when you use flush(void) instead of flush()  . GCC on the other hand does not. welp that's my cool compiler story for today, hope u enjoyed it
-	while(getchar()!='\n'){}
-}
 
 int GetFileLineCount(char *filename){
 	FILE *fin;
