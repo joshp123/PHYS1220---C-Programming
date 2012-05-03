@@ -4,12 +4,12 @@ Project A: Quadratic Equation solver
 
 v1.0.0 (this actually works don't try and fork it and forget to save as and break everyhting k)
 
-Only 10 times shittier and more annoying than using python! (http://pastebin.com/UTvA79SL implemented in python as a fun break from doing this. this is how painful c is, i literally did the same thing in another language for fun. ;_; )
+Only 10 times worse and more annoying than using python! (http://pastebin.com/UTvA79SL implemented in python as a fun break from doing this. this is how painful c is, i literally did the same thing in another language for fun. ;_; )
 
 Current limitations:
 
 - Prints everything to 2 decimal places instead of intelligently detecting whether stuff is an integer or not
-- Breaks if you enter a huge integer (eg 10^100 or whatever)
+- Breaks if you enter a huge integer (eg 10^100 or whatever). I could fix this by using long doubles I guess but eh find replace is effort and nobody is going to bother calculating equations that big anyway. WONTFIX
 
 */
 
@@ -38,12 +38,12 @@ return root;
 
 /* Function to flush to end of line */
 
-void flush(void){  // compiler only plays nice when you use void instead of ()  vOv
+void flush(){ // Yet another reason why LCC is horrendous: LCC complier only plays nice when you use flush(void) instead of flush()  . GCC on the other hand does not. welp that's my cool compiler story for today, hope u enjoyed it
 	while(getchar()!='\n'){}
 }
 
 /* Function to get input in form of float and check it's legit */
-float GetFloat(void){
+float GetFloat(){
 	float input;
 	int valid = 0;
 	while(valid==0){
