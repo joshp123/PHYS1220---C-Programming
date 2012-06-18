@@ -1,3 +1,0 @@
-Warning c:\cdev\project_a\quadratic.c: 46  missing prototype for flush
-Warning c:\cdev\project_a\quadratic.c: 46  Missing prototype for 'flush'
-Warning c:\cdev\project_a\quadratic.c: 56  declaration of 'flush' does not match previous declaration at c:\cdev\project_a\quadratic.c 46

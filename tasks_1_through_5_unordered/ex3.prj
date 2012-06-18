@@ -1,5 +1,0 @@
-; Wedit project file. Syntax: Name = value
-[ex3]
-PrjFiles=1
-File1=var.c
-ProjectFlags=0
