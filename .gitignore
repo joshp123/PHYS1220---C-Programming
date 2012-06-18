@@ -1,0 +1,7 @@
+# Compiled exes:
+
+*.exe
+*.prj
+*.~c
+
+lcc/
