@@ -1,0 +1,23 @@
+TODO:
+
+figure out if we have to declare array lengths (i.e. create and arbitraty limit) or if we can dynamically extend them
+
+-- What you could do, is make them pointers to floats, and dynamically allocate memory and set the pointer to point at your new double-array
+It's dirty
+but works somehwat :(
+Remember to clear the memory after you're done, though
+
+document smart things like ignoring last blank line etc
+
+
+set up portabl sublime-text w/gcc and build system
+
+(and maybe portable git?)
+
+FOODE LISTE:
+~recipes~
+fruit
+
+
+
+156968571413463.04
