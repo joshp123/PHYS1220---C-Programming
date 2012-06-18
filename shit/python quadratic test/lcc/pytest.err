@@ -1,6 +1,0 @@
-Error "c:\cdev\shit\python quadratic test\python_quadradic_test.c": 40  undeclared identifier 'pArgs'
-Error "c:\cdev\shit\python quadratic test\python_quadradic_test.c": 40  operands of = have illegal types 'int' and 'pointer to struct _object'
-Error "c:\cdev\shit\python quadratic test\python_quadradic_test.c": 41  undeclared identifier 'i'
-Error "c:\cdev\shit\python quadratic test\python_quadradic_test.c": 49  type error in argument 1 to `PyTuple_SetItem'; found 'int' expected 'pointer to struct _object'
-Error "c:\cdev\shit\python quadratic test\python_quadradic_test.c": 52  type error in argument 2 to `PyObject_CallObject'; found 'int' expected 'pointer to struct _object'
-Error "c:\cdev\shit\python quadratic test\python_quadradic_test.c": 54  operands of != have illegal types 'int' and 'pointer to void'
